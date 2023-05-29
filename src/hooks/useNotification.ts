@@ -49,11 +49,21 @@ export const useNotification = () => {
         });
     };
 
+    const parametersSet = () => {
+        return toast({
+            title: 'Параметры успешно применены',
+            status: 'success',
+            duration: 1500,
+            isClosable: true,
+        });
+    };
+
     return {
         loginSuccess,
         loginError,
         logoutSuccess,
         confirmEmail,
         signUpError,
+        parametersSet,
     };
 };

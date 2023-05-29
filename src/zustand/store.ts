@@ -20,6 +20,7 @@ type PromptFormStoreType = {
     setIsTitled: (value: boolean) => void;
     setPromptTitle: (title: string) => void;
     setPromptPresets: (presets: { [x: string]: any }[] | null) => void;
+    clearPromtForm: () => void;
 };
 
 export const useAuthStore = create<AuthStoreType>(set => ({
@@ -42,4 +43,13 @@ export const usePromptFormStore = create<PromptFormStoreType>(set => ({
     setIsFormatted: (value: boolean) => set({ isFormatted: value }),
     setIsTitled: (value: boolean) => set({ isTitled: value }),
     setInitialText: (text: string) => set({ initialText: text }),
+    clearPromtForm: () =>
+        set({
+            isFormatted: false,
+            isTitled: false,
+            promptTitle: null,
+            selectedPromptPreset: 1,
+            promptPresets: null,
+            initialText: null,
+        }),
 }));

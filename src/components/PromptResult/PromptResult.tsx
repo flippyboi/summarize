@@ -14,7 +14,7 @@ export const PromptResult: React.FC<{ resultText?: string }> = ({ resultText }) 
     const [isEditingName, setIsEditingName] = React.useState(false);
     const { user } = useAuthStore();
     const { isMobile } = useWindowSize();
-    const { initialText, selectedPromptPreset, promptTitle } = usePromptFormStore();
+    const { initialText, selectedPromptPreset, promptTitle, clearPromtForm } = usePromptFormStore();
 
     const onSaveResult = async () => {
         setIsSaving(true);
@@ -35,6 +35,11 @@ export const PromptResult: React.FC<{ resultText?: string }> = ({ resultText }) 
             });
     };
 
+    const handleModalClose = () => {
+        clearPromtForm();
+        onClose();
+    };
+
     React.useEffect(() => {
         if (resultText && resultText?.length > 0) {
             onOpen();
@@ -46,14 +51,14 @@ export const PromptResult: React.FC<{ resultText?: string }> = ({ resultText }) 
             <MobileSheet
                 snapPoints={[window.innerHeight - 100]}
                 isOpen={isOpen}
-                onClose={onClose}
+                onClose={handleModalClose}
                 header={
                     <>
                         <Flex alignItems="center">
                             {!isEditingName ? (
                                 <>
                                     <Text fontWeight={600} fontSize={24}>
-                                        Результат
+                                        {promptTitle || 'Результат'}
                                     </Text>
                                     <EditIcon
                                         ml={2}

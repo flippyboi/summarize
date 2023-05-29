@@ -19,24 +19,42 @@ export const PromptForm = () => {
         selectedPromptPreset,
         setSelectedPromptPreset,
         setInitialText,
+        isFormatted,
+        isTitled,
+        setPromptTitle,
     } = usePromptFormStore();
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [isLoading, setIsLoading] = useState(false);
     const [result, setResult] = useState<string | undefined>('');
-    const handleRequest = useCallback(() => {
+    const handleRequest = () => {
         setIsLoading(true);
         const prompt = promptPresets?.find(preset => preset.id === selectedPromptPreset);
         if (prompt && textareaRef.current) {
             setInitialText(textareaRef.current.value);
-            createCompletion(prompt.promt + textareaRef.current?.value)
+            createCompletion(prompt.promt + ': ' + textareaRef.current?.value)
                 .then(res => {
-                    setResult(res);
+                    if (isFormatted) {
+                        createCompletion('Отформатируй данный текст: ' + res).then(res => {
+                            setResult(res);
+                        });
+                    } else {
+                        setResult(res);
+                    }
+                    if (isTitled) {
+                        createCompletion('Придумай короткий заголовок данному тексту: ' + res).then(
+                            res => {
+                                if (res) {
+                                    setPromptTitle(res);
+                                }
+                            },
+                        );
+                    }
                 })
                 .finally(() => {
                     setIsLoading(false);
                 });
         }
-    }, [promptPresets, selectedPromptPreset, setInitialText]);
+    };
 
     React.useEffect(() => {
         supabase

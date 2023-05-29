@@ -14,6 +14,7 @@ import {
     useDisclosure,
 } from '@chakra-ui/react';
 
+import { useNotification } from '../../hooks/useNotification';
 import { usePromptFormStore } from '../../zustand/store';
 
 type PromptParamsModalProps = {
@@ -27,14 +28,22 @@ export const PromptParamsModal: React.FC<PromptParamsModalProps> = ({ isOpen, on
         onClose,
     });
     const { isFormatted, isTitled, setIsFormatted, setIsTitled } = usePromptFormStore();
+    const { parametersSet } = useNotification();
+
+    const [parametersTriggered, setParametersTriggered] = React.useState(false);
 
     const onCancel = () => {
         setIsFormatted(false);
         setIsTitled(false);
     };
 
+    const handleModalClose = () => {
+        onModalClose();
+        parametersTriggered && parametersSet();
+    };
+
     return (
-        <Modal isOpen={isModalOpen} onClose={onModalClose}>
+        <Modal isOpen={isModalOpen} onClose={handleModalClose}>
             <ModalOverlay />
             <ModalContent>
                 <ModalHeader>Параметры</ModalHeader>
@@ -43,12 +52,21 @@ export const PromptParamsModal: React.FC<PromptParamsModalProps> = ({ isOpen, on
                         <Text>Форматировать🪄</Text>
                         <Switch
                             isChecked={isFormatted}
-                            onChange={() => setIsFormatted(!isFormatted)}
+                            onChange={() => {
+                                setIsFormatted(!isFormatted);
+                                setParametersTriggered(true);
+                            }}
                         />
                     </Flex>
                     <Flex align="center" justify="space-between">
                         <Text>Добавить заголовок🏷️</Text>
-                        <Switch isChecked={isTitled} onChange={() => setIsTitled(!isTitled)} />
+                        <Switch
+                            isChecked={isTitled}
+                            onChange={() => {
+                                setIsTitled(!isTitled);
+                                setParametersTriggered(true);
+                            }}
+                        />
                     </Flex>
                 </ModalBody>
                 <ModalFooter gap={2}>
@@ -57,7 +75,7 @@ export const PromptParamsModal: React.FC<PromptParamsModalProps> = ({ isOpen, on
                             Отменить
                         </Button>
                     )}
-                    <Button onClick={onModalClose}>Закрыть</Button>
+                    <Button onClick={handleModalClose}>Закрыть</Button>
                 </ModalFooter>
             </ModalContent>
         </Modal>
