@@ -56,6 +56,7 @@ export const HomePage = () => {
                 <Grid mt={8} templateColumns="repeat(2, 1fr)" gap={3}>
                     {desc.map(item => (
                         <Flex
+                            key={item.title}
                             fontSize={18}
                             fontWeight={600}
                             borderRadius={8}

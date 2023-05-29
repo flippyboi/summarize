@@ -1,0 +1,19 @@
+.container {
+    background-color: transparent !important;
+    z-index: 10000000 !important;
+}
+
+.content {
+    background-color: unset;
+    padding: 20px;
+    backdrop-filter: blur(20px);
+    touch-action: auto !important;
+}
+
+.header {
+    background-color: unset;
+    padding: 20px;
+    backdrop-filter: blur(20px);
+    display: flex;
+    justify-content: space-between;
+}

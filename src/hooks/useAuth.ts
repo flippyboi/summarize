@@ -4,7 +4,13 @@ import { useAuthStore } from '../zustand/store';
 
 export const useAuth = () => {
     const authStore = useAuthStore();
-    const { loginSuccess, loginError, logoutSuccess, confirmEmail } = useNotification();
+    const {
+        loginSuccess,
+        loginError,
+        logoutSuccess,
+        confirmEmail,
+        signUpError,
+    } = useNotification();
 
     const signUp = async (email: string, password: string) => {
         const { data, error } = await supabase.auth.signUp({
@@ -15,7 +21,7 @@ export const useAuth = () => {
             return confirmEmail();
         }
         if (error) {
-            console.log(error);
+            return signUpError(error.message);
         }
     };
 

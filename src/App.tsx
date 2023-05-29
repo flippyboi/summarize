@@ -5,16 +5,16 @@ import { HomePage } from './components/HomePage/HomePage';
 import Content from './components/Layout/Content/Content';
 import Footer from './components/Layout/Footer/Footer';
 import Header from './components/Layout/Header/Header';
-import { PromtForm } from './components/PromtForm/PromtForm';
+import { PromptForm } from './components/PromptForm/PromptForm';
 import { useAuth } from './hooks/useAuth';
 //import { supabase } from './hooks/useSupabase';
 import { useAuthStore } from './zustand/store';
 
+import './App.css';
+
 function App() {
     const { setUser, isAuth } = useAuthStore();
     const { getUser } = useAuth();
-
-    console.log(isAuth);
 
     React.useEffect(() => {
         setUser(getUser());
@@ -22,10 +22,9 @@ function App() {
     }, []);
 
     return (
-        <div className="app">
+        <div className="app" style={{ height: `${window.innerHeight}px` }}>
             <Header />
-            <Content>{isAuth ? <PromtForm /> : <HomePage />}</Content>
-            <Footer />
+            <Content>{isAuth ? <PromptForm /> : <HomePage />}</Content>
         </div>
     );
 }

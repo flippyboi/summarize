@@ -30,6 +30,15 @@ export const useNotification = () => {
         });
     };
 
+    const signUpError = (errorMsg: string) => {
+        return toast({
+            title: 'Ошибка регистрации',
+            description: errorMsg,
+            duration: 3000,
+            isClosable: false,
+        });
+    };
+
     const confirmEmail = () => {
         return toast({
             title: 'Проверьте электронную почту',
@@ -45,5 +54,6 @@ export const useNotification = () => {
         loginError,
         logoutSuccess,
         confirmEmail,
+        signUpError,
     };
 };

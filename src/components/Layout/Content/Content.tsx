@@ -1,7 +1,6 @@
 import React from 'react';
 
 import { Flex } from '@chakra-ui/react';
-import { isMobile } from 'react-device-detect';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 
 interface ContentProps {
@@ -21,7 +20,7 @@ const Content: React.FC<ContentProps> = ({ children }) => {
     ]);
 
     return (
-        <Flex my="4" direction="column" borderRadius={'12px'} px="6">
+        <Flex my="4" direction="column" borderRadius={'12px'} grow={3} px="6">
             {/* <RouterProvider router={router}> */}
             {children}
             {/* </RouterProvider> */}
