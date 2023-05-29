@@ -27,19 +27,19 @@ const desc = [
     },
     {
         title: 'Выделить ключевые темы',
-        icon: '',
+        icon: '🗝️',
     },
     {
         title: 'Перевести на другой язык',
-        icon: '',
+        icon: '👅',
     },
     {
         title: 'Придумать заголовок',
-        icon: '',
+        icon: '🗨️',
     },
     {
         title: 'Найти ошибки',
-        icon: '',
+        icon: '✨',
     },
 ];
 
@@ -57,16 +57,17 @@ export const HomePage = () => {
                     {desc.map(item => (
                         <Flex
                             key={item.title}
-                            fontSize={18}
+                            fontSize={16}
                             fontWeight={600}
                             borderRadius={8}
                             p={6}
+                            gap={2}
                             align="center"
                             justify="center"
                             border="1.5px solid darkgray"
                         >
-                            {item.icon}
-                            {item.title}
+                            <Text>{item.icon}</Text>
+                            <Text>{item.title}</Text>
                         </Flex>
                     ))}
                 </Grid>
