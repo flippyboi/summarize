@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 
 import { ArrowRightIcon, SettingsIcon } from '@chakra-ui/icons';
 import { Button, Flex, Textarea, Select, useDisclosure } from '@chakra-ui/react';
@@ -41,13 +41,14 @@ export const PromptForm = () => {
                         setResult(res);
                     }
                     if (isTitled) {
-                        createCompletion('Придумай короткий заголовок данному тексту: ' + res).then(
-                            res => {
-                                if (res) {
-                                    setPromptTitle(res);
-                                }
-                            },
-                        );
+                        createCompletion(
+                            'Придумай короткий заголовок длиной не более 6 слов данному тексту: ' +
+                                res,
+                        ).then(res => {
+                            if (res) {
+                                setPromptTitle(res);
+                            }
+                        });
                     }
                 })
                 .finally(() => {

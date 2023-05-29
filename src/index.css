@@ -13,3 +13,7 @@
 body {
   /* overflow-y: hidden; */
 }
+
+#chakra-toast-manager-bottom {
+  z-index: 10000000 !important;
+}

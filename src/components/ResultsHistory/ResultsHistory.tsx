@@ -1,9 +1,10 @@
 import React from 'react';
 
-import { CopyIcon, DeleteIcon } from '@chakra-ui/icons';
-import { Badge, Button, Card, CardBody, CardFooter, CardHeader, Text } from '@chakra-ui/react';
+import { CopyIcon, DeleteIcon, ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
+import { Button, Card, CardBody, CardFooter, CardHeader, Divider, Text } from '@chakra-ui/react';
 import dayjs from 'dayjs';
 
+import { useNotification } from '../../hooks/useNotification';
 import { supabase } from '../../hooks/useSupabase';
 import useWindowSize from '../../hooks/useWindowSize';
 import { MobileSheet } from '../MobileSheet/MobileSheet';
@@ -18,24 +19,75 @@ export const ResultsHistory: React.FC<ResultsHistoryProps> = ({ isOpen, onClose 
 
     const [items, setItems] = React.useState<{ [x: string]: any }[] | null>(null);
 
+    const [watchInitial, setWatchInitial] = React.useState<string | null>(null);
+
+    const { copiedToClipboard, deletedHistoryItem } = useNotification();
+
     const [isLoading, setIsLoading] = React.useState(false);
+
+    const copyToClipboard = (text: string) => {
+        navigator.clipboard.writeText(text);
+        copiedToClipboard();
+    };
+
+    const fetchItems = async () => {
+        setIsLoading(true);
+        await supabase
+            .from('results')
+            .select('*')
+            .order('created_at', { ascending: false })
+            .then(data => {
+                setItems(data.data);
+                setIsLoading(false);
+            });
+    };
+
+    const deleteItem = async (id: string) => {
+        await supabase
+            .from('results')
+            .delete()
+            .eq('id', id)
+            .then(() => {
+                fetchItems();
+                deletedHistoryItem();
+            });
+    };
+
+    React.useEffect(() => {
+        fetchItems();
+    }, []);
 
     const Content: React.FC = () => {
         return (
             <>
                 {items &&
                     items.map(item => (
-                        <Card mb={4}>
+                        <Card mb={4} key={item.id}>
                             <CardHeader display="flex" justifyContent="space-between">
-                                <Text>{item.id}</Text>
+                                <Text>{item.name}</Text>
                                 {dayjs(item.created_at).format('DD.MM.YYYY, HH:mm')}
                             </CardHeader>
-                            <CardBody>{item.result_text}</CardBody>
+                            <Divider />
+                            <CardBody>
+                                <Text textAlign="justify">
+                                    {watchInitial === item.id
+                                        ? item.initial_text
+                                        : item.result_text}
+                                </Text>
+                            </CardBody>
                             <CardFooter pt={0} justify="end">
-                                <Button variant="ghost">
+                                <Button variant="ghost" onClick={() => copyToClipboard(item.text)}>
                                     <CopyIcon />
                                 </Button>
-                                <Button variant="ghost">
+                                <Button
+                                    variant="ghost"
+                                    onClick={() =>
+                                        setWatchInitial(prev => (prev === null ? item.id : null))
+                                    }
+                                >
+                                    {watchInitial === item.id ? <ViewOffIcon /> : <ViewIcon />}
+                                </Button>
+                                <Button variant="ghost" onClick={() => deleteItem(item.id)}>
                                     <DeleteIcon />
                                 </Button>
                             </CardFooter>
@@ -44,18 +96,6 @@ export const ResultsHistory: React.FC<ResultsHistoryProps> = ({ isOpen, onClose 
             </>
         );
     };
-
-    React.useEffect(() => {
-        setIsLoading(true);
-        supabase
-            .from('results')
-            .select('*')
-            .order('created_at', { ascending: false })
-            .then(data => {
-                setItems(data.data);
-                setIsLoading(false);
-            });
-    }, []);
 
     if (isMobile) {
         return (
@@ -69,8 +109,6 @@ export const ResultsHistory: React.FC<ResultsHistoryProps> = ({ isOpen, onClose 
                 }
                 content={
                     <>
-                        <Content />
-                        <Content />
                         <Content />
                     </>
                 }

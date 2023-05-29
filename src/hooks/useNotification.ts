@@ -58,6 +58,24 @@ export const useNotification = () => {
         });
     };
 
+    const copiedToClipboard = () => {
+        return toast({
+            title: 'Скопировано в буфер обмена',
+            duration: 1000,
+            isClosable: false,
+            status: 'info',
+        });
+    };
+
+    const deletedHistoryItem = () => {
+        return toast({
+            title: 'Элемент успешно удален',
+            duration: 1000,
+            isClosable: false,
+            status: 'info',
+        });
+    };
+
     return {
         loginSuccess,
         loginError,
@@ -65,5 +83,7 @@ export const useNotification = () => {
         confirmEmail,
         signUpError,
         parametersSet,
+        copiedToClipboard,
+        deletedHistoryItem,
     };
 };

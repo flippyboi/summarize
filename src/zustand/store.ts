@@ -49,7 +49,6 @@ export const usePromptFormStore = create<PromptFormStoreType>(set => ({
             isTitled: false,
             promptTitle: null,
             selectedPromptPreset: 1,
-            promptPresets: null,
             initialText: null,
         }),
 }));

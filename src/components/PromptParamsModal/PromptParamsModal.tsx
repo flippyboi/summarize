@@ -59,7 +59,7 @@ export const PromptParamsModal: React.FC<PromptParamsModalProps> = ({ isOpen, on
                         />
                     </Flex>
                     <Flex align="center" justify="space-between">
-                        <Text>Добавить заголовок🏷️</Text>
+                        <Text>Придумать заголовок🏷️</Text>
                         <Switch
                             isChecked={isTitled}
                             onChange={() => {

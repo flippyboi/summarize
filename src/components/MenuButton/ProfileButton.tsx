@@ -11,7 +11,7 @@ import {
     Text,
     useDisclosure,
 } from '@chakra-ui/react';
-import { FaUserAlt, FaBookmark, FaTired, FaMagic, FaSignOutAlt } from 'react-icons/fa';
+import { FaUserAlt, FaBookmark, FaTired, FaMagic, FaSignOutAlt, FaInfo } from 'react-icons/fa';
 import { MdSettingsSuggest } from 'react-icons/md';
 
 import { useAuth } from '../../hooks/useAuth';
@@ -40,11 +40,11 @@ const ProfileButton = () => {
                     <Icon as={FaMagic} mr="2" /> Настройки
                 </MenuItem>
                 <MenuItem>
-                    <Icon as={FaTired} mr="2" /> Че-то еще
+                    <Icon as={FaInfo} mr="2" /> FAQ
                 </MenuItem>
                 <Divider />
                 <MenuItem onClick={signOut} mt="2" justifyContent="center">
-                    <Text fontWeight="700">Выход</Text>
+                    <Text fontWeight="700">Выход мз аккаунта</Text>
                 </MenuItem>
             </MenuList>
             <ResultsHistory isOpen={isOpen} onClose={onClose} />

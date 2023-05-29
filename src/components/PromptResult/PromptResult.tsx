@@ -12,6 +12,7 @@ export const PromptResult: React.FC<{ resultText?: string }> = ({ resultText }) 
     const { isOpen, onClose, onOpen } = useDisclosure();
     const [isSaving, setIsSaving] = React.useState(false);
     const [isEditingName, setIsEditingName] = React.useState(false);
+    const [isSaved, setIsSaved] = React.useState(false);
     const { user } = useAuthStore();
     const { isMobile } = useWindowSize();
     const { initialText, selectedPromptPreset, promptTitle, clearPromtForm } = usePromptFormStore();
@@ -31,7 +32,7 @@ export const PromptResult: React.FC<{ resultText?: string }> = ({ resultText }) 
             ])
             .then(() => {
                 setIsSaving(false);
-                //onClose();
+                setIsSaved(true);
             });
     };
 
@@ -57,8 +58,8 @@ export const PromptResult: React.FC<{ resultText?: string }> = ({ resultText }) 
                         <Flex alignItems="center">
                             {!isEditingName ? (
                                 <>
-                                    <Text fontWeight={600} fontSize={24}>
-                                        {promptTitle || 'Результат'}
+                                    <Text fontWeight={600} fontSize={18}>
+                                        {promptTitle?.replaceAll('"', '') || 'Результат'}
                                     </Text>
                                     <EditIcon
                                         ml={2}
@@ -74,11 +75,12 @@ export const PromptResult: React.FC<{ resultText?: string }> = ({ resultText }) 
                             )}
                         </Flex>
 
-                        {!isEditingName && (
+                        {!isEditingName && !isSaved && (
                             <Button variant="ghost" onClick={onSaveResult} isLoading={isSaving}>
                                 Сохранить
                             </Button>
                         )}
+                        {isSaved && <Text>Сохранено</Text>}
                     </>
                 }
                 content={<Text>{resultText}</Text>}
