@@ -76,7 +76,10 @@ export const ResultsHistory: React.FC<ResultsHistoryProps> = ({ isOpen, onClose 
                                 </Text>
                             </CardBody>
                             <CardFooter pt={0} justify="end">
-                                <Button variant="ghost" onClick={() => copyToClipboard(item.text)}>
+                                <Button
+                                    variant="ghost"
+                                    onClick={() => copyToClipboard(item.result_text)}
+                                >
                                     <CopyIcon />
                                 </Button>
                                 <Button
