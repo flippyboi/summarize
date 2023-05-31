@@ -138,7 +138,7 @@ export const PromptResult: React.FC<{ resultText?: string }> = ({ resultText }) 
                 <Divider />
                 <ModalBody>{resultText}</ModalBody>
                 <ModalFooter>
-                    <Button onClick={() => copyToClipboard(resultText)}>
+                    <Button onClick={() => copyToClipboard(resultText ? resultText : '')}>
                         <CopyIcon />
                     </Button>
                 </ModalFooter>
