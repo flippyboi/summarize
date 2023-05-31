@@ -1,18 +1,6 @@
 import React from 'react';
 
-import {
-    Box,
-    Button,
-    Flex,
-    Grid,
-    Heading,
-    Icon,
-    List,
-    ListIcon,
-    ListItem,
-    Text,
-    useDisclosure,
-} from '@chakra-ui/react';
+import { Box, Button, Flex, Grid, Heading, Text, useDisclosure } from '@chakra-ui/react';
 
 import { LoginModal } from '../LoginModal/LoginModal';
 

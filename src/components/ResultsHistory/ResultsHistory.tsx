@@ -1,7 +1,21 @@
 import React from 'react';
 
 import { CopyIcon, DeleteIcon, ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
-import { Button, Card, CardBody, CardFooter, CardHeader, Divider, Text } from '@chakra-ui/react';
+import {
+    Box,
+    Button,
+    Card,
+    CardBody,
+    CardFooter,
+    CardHeader,
+    Divider,
+    Grid,
+    Modal,
+    ModalBody,
+    ModalContent,
+    ModalHeader,
+    Text,
+} from '@chakra-ui/react';
 import dayjs from 'dayjs';
 
 import { useNotification } from '../../hooks/useNotification';
@@ -120,5 +134,20 @@ export const ResultsHistory: React.FC<ResultsHistoryProps> = ({ isOpen, onClose 
             />
         );
     }
-    return null;
+    return (
+        <Modal isOpen={isOpen} onClose={onClose}>
+            <ModalContent minWidth="60vw">
+                <ModalHeader>
+                    <Text fontWeight={600} fontSize={24}>
+                        Результаты
+                    </Text>
+                </ModalHeader>
+                <ModalBody>
+                    <Grid templateColumns="repeat(2, 1fr)" maxHeight="70vh" overflowY="auto">
+                        <Content />
+                    </Grid>
+                </ModalBody>
+            </ModalContent>
+        </Modal>
+    );
 };

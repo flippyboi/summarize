@@ -37,7 +37,7 @@ const ProfileButton = () => {
                     <Icon as={FaBookmark} mr="2" /> Сохраненное
                 </MenuItem>
                 <MenuItem>
-                    <Icon as={FaMagic} mr="2" /> Настройки
+                    <Icon as={FaMagic} mr="2" /> Параметры
                 </MenuItem>
                 <MenuItem>
                     <Icon as={FaInfo} mr="2" /> FAQ

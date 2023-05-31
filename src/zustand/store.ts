@@ -14,12 +14,14 @@ type PromptFormStoreType = {
     selectedPromptPreset: number;
     promptPresets: { [x: string]: any }[] | null;
     initialText: string | null;
+    temperature: number;
     setInitialText: (text: string) => void;
     setSelectedPromptPreset: (id: number) => void;
     setIsFormatted: (value: boolean) => void;
     setIsTitled: (value: boolean) => void;
     setPromptTitle: (title: string) => void;
     setPromptPresets: (presets: { [x: string]: any }[] | null) => void;
+    setTemperature: (value: number) => void;
     clearPromtForm: () => void;
 };
 
@@ -37,12 +39,14 @@ export const usePromptFormStore = create<PromptFormStoreType>(set => ({
     selectedPromptPreset: 1,
     promptPresets: null,
     initialText: null,
+    temperature: 0.5,
     setPromptPresets: (presets: { [x: string]: any }[] | null) => set({ promptPresets: presets }),
     setSelectedPromptPreset: (id: number) => set({ selectedPromptPreset: id }),
     setPromptTitle: (title: string) => set({ promptTitle: title }),
     setIsFormatted: (value: boolean) => set({ isFormatted: value }),
     setIsTitled: (value: boolean) => set({ isTitled: value }),
     setInitialText: (text: string) => set({ initialText: text }),
+    setTemperature: (value: number) => set({ temperature: value }),
     clearPromtForm: () =>
         set({
             isFormatted: false,
@@ -50,5 +54,6 @@ export const usePromptFormStore = create<PromptFormStoreType>(set => ({
             promptTitle: null,
             selectedPromptPreset: 1,
             initialText: null,
+            temperature: 0.5,
         }),
 }));

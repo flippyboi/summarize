@@ -9,6 +9,9 @@ import {
     ModalFooter,
     ModalHeader,
     ModalOverlay,
+    Slider,
+    SliderFilledTrack,
+    SliderTrack,
     Switch,
     Text,
     useDisclosure,
@@ -27,7 +30,14 @@ export const PromptParamsModal: React.FC<PromptParamsModalProps> = ({ isOpen, on
         isOpen,
         onClose,
     });
-    const { isFormatted, isTitled, setIsFormatted, setIsTitled } = usePromptFormStore();
+    const {
+        isFormatted,
+        isTitled,
+        setIsFormatted,
+        setIsTitled,
+        temperature,
+        setTemperature,
+    } = usePromptFormStore();
     const { parametersSet } = useNotification();
 
     const [parametersTriggered, setParametersTriggered] = React.useState(false);
@@ -67,6 +77,24 @@ export const PromptParamsModal: React.FC<PromptParamsModalProps> = ({ isOpen, on
                                 setParametersTriggered(true);
                             }}
                         />
+                    </Flex>
+                    <Flex direction="column">
+                        <Text mb={6}>Креативность генерации текста (температура)</Text>
+                        <Slider
+                            value={temperature}
+                            min={0}
+                            max={1}
+                            step={0.05}
+                            onChange={value => {
+                                setTemperature(value);
+                                setParametersTriggered(true);
+                            }}
+                        >
+                            <SliderTrack>
+                                <SliderFilledTrack />
+                            </SliderTrack>
+                        </Slider>
+                        <Text mt={4}>{temperature}</Text>
                     </Flex>
                 </ModalBody>
                 <ModalFooter gap={2}>
