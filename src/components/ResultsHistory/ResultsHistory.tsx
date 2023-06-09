@@ -18,6 +18,8 @@ import {
 } from '@chakra-ui/react';
 import dayjs from 'dayjs';
 
+import DOMPurify from 'dompurify';
+
 import { useNotification } from '../../hooks/useNotification';
 import { supabase } from '../../hooks/useSupabase';
 import useWindowSize from '../../hooks/useWindowSize';
@@ -74,19 +76,28 @@ export const ResultsHistory: React.FC<ResultsHistoryProps> = ({ isOpen, onClose 
     const Content: React.FC = () => {
         return (
             <>
-                {items &&
+                {items && items.length !== 0 ? (
                     items.map(item => (
-                        <Card mb={4} key={item.id}>
+                        <Card mb={4} key={item.id} boxShadow="md">
                             <CardHeader display="flex" justifyContent="space-between">
                                 <Text>{item.name}</Text>
                                 {dayjs(item.created_at).format('DD.MM.YYYY, HH:mm')}
                             </CardHeader>
                             <Divider />
                             <CardBody>
-                                <Text textAlign="justify">
-                                    {watchInitial === item.id
+                                <Text
+                                    textAlign="justify"
+                                    dangerouslySetInnerHTML={{
+                                        __html: DOMPurify.sanitize(
+                                            watchInitial === item.id
+                                                ? item.initial_text
+                                                : item.result_text,
+                                        ),
+                                    }}
+                                >
+                                    {/* {watchInitial === item.id
                                         ? item.initial_text
-                                        : item.result_text}
+                                        : item.result_text} */}
                                 </Text>
                             </CardBody>
                             <CardFooter pt={0} justify="end">
@@ -109,7 +120,10 @@ export const ResultsHistory: React.FC<ResultsHistoryProps> = ({ isOpen, onClose 
                                 </Button>
                             </CardFooter>
                         </Card>
-                    ))}
+                    ))
+                ) : (
+                    <Text>Пока нет сохраненных результатов</Text>
+                )}
             </>
         );
     };
@@ -143,7 +157,12 @@ export const ResultsHistory: React.FC<ResultsHistoryProps> = ({ isOpen, onClose 
                     </Text>
                 </ModalHeader>
                 <ModalBody>
-                    <Grid templateColumns="repeat(2, 1fr)" maxHeight="70vh" overflowY="auto">
+                    <Grid
+                        templateColumns="repeat(2, 1fr)"
+                        gap={2}
+                        maxHeight="70vh"
+                        overflowY="auto"
+                    >
                         <Content />
                     </Grid>
                 </ModalBody>

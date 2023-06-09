@@ -76,6 +76,15 @@ export const useNotification = () => {
         });
     };
 
+    const emptyField = () => {
+        return toast({
+            title: 'Вы не ввели текст',
+            duration: 2000,
+            isClosable: true,
+            status: 'error',
+        });
+    };
+
     return {
         loginSuccess,
         loginError,
@@ -85,5 +94,6 @@ export const useNotification = () => {
         parametersSet,
         copiedToClipboard,
         deletedHistoryItem,
+        emptyField,
     };
 };

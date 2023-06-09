@@ -14,6 +14,7 @@ import {
     Text,
     useDisclosure,
 } from '@chakra-ui/react';
+import DOMPurify from 'dompurify';
 
 import { useNotification } from '../../hooks/useNotification';
 import { supabase } from '../../hooks/useSupabase';
@@ -103,7 +104,13 @@ export const PromptResult: React.FC<{ resultText?: string }> = ({ resultText }) 
                         {isSaved && <Text>Сохранено</Text>}
                     </>
                 }
-                content={<Text>{resultText}</Text>}
+                content={
+                    <Text
+                        dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(resultText || '') }}
+                    >
+                        {/* {resultText} */}
+                    </Text>
+                }
             />
         );
     }
@@ -136,7 +143,11 @@ export const PromptResult: React.FC<{ resultText?: string }> = ({ resultText }) 
                     {isSaved && <Text>Сохранено</Text>}
                 </ModalHeader>
                 <Divider />
-                <ModalBody>{resultText}</ModalBody>
+                <ModalBody
+                    dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(resultText || '') }}
+                >
+                    {/* {resultText} */}
+                </ModalBody>
                 <ModalFooter>
                     <Button onClick={() => copyToClipboard(resultText ? resultText : '')}>
                         <CopyIcon />

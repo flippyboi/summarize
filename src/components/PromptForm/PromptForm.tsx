@@ -3,6 +3,7 @@ import React, { useRef, useState } from 'react';
 import { ArrowRightIcon, SettingsIcon } from '@chakra-ui/icons';
 import { Button, Flex, Textarea, Select, useDisclosure } from '@chakra-ui/react';
 
+import { useNotification } from '../../hooks/useNotification';
 import { supabase } from '../../hooks/useSupabase';
 import useWindowSize from '../../hooks/useWindowSize';
 import { createCompletion } from '../../utils/gpt';
@@ -13,6 +14,7 @@ import { PromptResult } from '../PromptResult/PromptResult';
 export const PromptForm = () => {
     const textareaRef = useRef<HTMLTextAreaElement>(null);
     const { isMobile } = useWindowSize();
+    const { emptyField } = useNotification();
     const {
         promptPresets,
         setPromptPresets,
@@ -22,19 +24,26 @@ export const PromptForm = () => {
         isFormatted,
         isTitled,
         setPromptTitle,
+        temperature,
     } = usePromptFormStore();
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [isLoading, setIsLoading] = useState(false);
     const [result, setResult] = useState<string | undefined>('');
     const handleRequest = () => {
+        if (textareaRef.current?.value === '') {
+            return emptyField();
+        }
         setIsLoading(true);
         const prompt = promptPresets?.find(preset => preset.id === selectedPromptPreset);
         if (prompt && textareaRef.current) {
             setInitialText(textareaRef.current.value);
-            createCompletion(prompt.promt + ': ' + textareaRef.current?.value)
+            createCompletion(`${prompt.promt}: "${textareaRef.current.value}"`, temperature)
                 .then(res => {
                     if (isFormatted) {
-                        createCompletion('Отформатируй данный текст: ' + res).then(res => {
+                        createCompletion(
+                            'Отформатируй данный текст в HTML: ' + res,
+                            temperature,
+                        ).then(res => {
                             setResult(res);
                         });
                     } else {
@@ -44,6 +53,7 @@ export const PromptForm = () => {
                         createCompletion(
                             'Придумай короткий заголовок длиной не более 6 слов данному тексту: ' +
                                 res,
+                            temperature,
                         ).then(res => {
                             if (res) {
                                 setPromptTitle(res);

@@ -1,7 +1,5 @@
 import { Configuration, OpenAIApi } from 'openai';
 
-import { usePromptFormStore as store } from '../zustand/store';
-
 const openAiConfig = new Configuration({
     apiKey: import.meta.env.VITE_OPENAI_API_KEY,
 });
@@ -10,10 +8,7 @@ delete openAiConfig.baseOptions.headers['User-Agent'];
 
 const openai = new OpenAIApi(openAiConfig);
 
-console.log(openai.listModels());
-
-export const createCompletion = async (promt?: string) => {
-    const { temperature } = store();
+export const createCompletion = async (promt?: string, temperature?: number) => {
     if (!promt) {
         return;
     }
