@@ -6,7 +6,7 @@ import { Button, Flex, Textarea, Select, useDisclosure } from '@chakra-ui/react'
 import { useNotification } from '../../hooks/useNotification';
 import { supabase } from '../../hooks/useSupabase';
 import useWindowSize from '../../hooks/useWindowSize';
-import { createCompletion } from '../../utils/gpt';
+import { rephrase, summarize } from '../../utils/gpt';
 import { usePromptFormStore } from '../../zustand/store';
 import { PromptParamsModal } from '../PromptParamsModal/PromptParamsModal';
 import { PromptResult } from '../PromptResult/PromptResult';
@@ -30,7 +30,7 @@ export const PromptForm = () => {
     } = usePromptFormStore();
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [isLoading, setIsLoading] = useState(false);
-    const [result, setResult] = useState<string[] | undefined>([]);
+    const [result, setResult] = useState<string[]>([]);
     const handleRequest = () => {
         if (textareaRef.current?.value === '') {
             return emptyField();
@@ -39,10 +39,26 @@ export const PromptForm = () => {
         const prompt = promptPresets?.find(preset => preset.id === selectedPromptPreset);
         if (prompt && textareaRef.current) {
             setInitialText(textareaRef.current.value);
-            createCompletion(textareaRef.current.value, temperature, numSeq, length).then(res => {
-                console.log(res);
-                setIsLoading(false);
-            });
+            switch (prompt.id) {
+                case 1:
+                    summarize(textareaRef.current.value, temperature, numSeq, length).then(data => {
+                        setResult(data);
+                        setIsLoading(false);
+                    });
+                    break;
+                case 3:
+                    rephrase(textareaRef.current.value, temperature).then(data => {
+                        setResult(data);
+                        setIsLoading(false);
+                    });
+                    break;
+                default:
+                    summarize(textareaRef.current.value, temperature, numSeq, length).then(data => {
+                        setResult(data);
+                        setIsLoading(false);
+                    });
+                    break;
+            }
         }
     };
 
@@ -83,9 +99,7 @@ export const PromptForm = () => {
                 </Flex>
             </Flex>
             <Flex height={isMobile ? 0 : '100%'}>
-                {result?.map(item => (
-                    <PromptResult resultText={item} />
-                ))}
+                <PromptResult results={result} />
             </Flex>
             <PromptParamsModal isOpen={isOpen} onClose={onClose} />
         </Flex>

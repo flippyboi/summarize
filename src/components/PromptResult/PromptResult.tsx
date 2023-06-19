@@ -22,15 +22,26 @@ import useWindowSize from '../../hooks/useWindowSize';
 import { useAuthStore, usePromptFormStore } from '../../zustand/store';
 import { MobileSheet } from '../MobileSheet/MobileSheet';
 
-export const PromptResult: React.FC<{ resultText?: string }> = ({ resultText }) => {
+export const PromptResult: React.FC<{ results: string[] }> = ({ results }) => {
     const { isOpen, onClose, onOpen } = useDisclosure();
     const [isSaving, setIsSaving] = React.useState(false);
     const [isEditingName, setIsEditingName] = React.useState(false);
     const [isSaved, setIsSaved] = React.useState(false);
     const { user } = useAuthStore();
     const { isMobile } = useWindowSize();
-    const { initialText, selectedPromptPreset, promptTitle, clearPromtForm } = usePromptFormStore();
+    const {
+        initialText,
+        selectedPromptPreset,
+        promptTitle,
+        clearPromtForm,
+        setPromptTitle,
+    } = usePromptFormStore();
     const { copiedToClipboard } = useNotification();
+
+    const [selectedRes, setSelectedRes] = React.useState<number>(0);
+    const [editingName, setEditingName] = React.useState(promptTitle || '');
+
+    console.log(promptTitle);
 
     const copyToClipboard = (text: string) => {
         navigator.clipboard.writeText(text);
@@ -43,7 +54,7 @@ export const PromptResult: React.FC<{ resultText?: string }> = ({ resultText }) 
             .from('results')
             .insert([
                 {
-                    result_text: resultText,
+                    result_text: selectedRes ? results[selectedRes] : results[0],
                     user_id: user.id,
                     initial_text: initialText,
                     preset_id: selectedPromptPreset,
@@ -63,10 +74,10 @@ export const PromptResult: React.FC<{ resultText?: string }> = ({ resultText }) 
     };
 
     React.useEffect(() => {
-        if (resultText && resultText?.length > 0) {
+        if (results.length > 0) {
             onOpen();
         }
-    }, [onOpen, resultText]);
+    }, [onOpen, results]);
 
     if (isMobile) {
         return (
@@ -80,7 +91,7 @@ export const PromptResult: React.FC<{ resultText?: string }> = ({ resultText }) 
                             {!isEditingName ? (
                                 <>
                                     <Text fontWeight={600} fontSize={18}>
-                                        {promptTitle?.replaceAll('"', '') || 'Результат'}
+                                        {promptTitle || 'Результат'}
                                     </Text>
                                     <EditIcon
                                         ml={2}
@@ -90,8 +101,18 @@ export const PromptResult: React.FC<{ resultText?: string }> = ({ resultText }) 
                                 </>
                             ) : (
                                 <>
-                                    <Input variant="outline" placeholder="Название" />
-                                    <CheckIcon ml={4} onClick={() => setIsEditingName(false)} />
+                                    <Input
+                                        variant="outline"
+                                        placeholder="Название"
+                                        onChange={e => setEditingName(e.target.value)}
+                                    />
+                                    <CheckIcon
+                                        ml={4}
+                                        onClick={() => {
+                                            setIsEditingName(false);
+                                            setPromptTitle(editingName);
+                                        }}
+                                    />
                                 </>
                             )}
                         </Flex>
@@ -104,13 +125,22 @@ export const PromptResult: React.FC<{ resultText?: string }> = ({ resultText }) 
                         {isSaved && <Text>Сохранено</Text>}
                     </>
                 }
-                content={
-                    <Text
-                        dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(resultText || '') }}
-                    >
-                        {/* {resultText} */}
-                    </Text>
-                }
+                content={results.map((result, index) => (
+                    <>
+                        <Text key={index} mb={2}>
+                            {result}
+                        </Text>
+                        {results.length > 1 && (
+                            <Button
+                                mb={6}
+                                variant={index === selectedRes ? 'solid' : 'outline'}
+                                onClick={() => setSelectedRes(index)}
+                            >
+                                {selectedRes === index ? 'Выбрано' : 'Выбрать этот вариант'}
+                            </Button>
+                        )}
+                    </>
+                ))}
             />
         );
     }
@@ -143,13 +173,25 @@ export const PromptResult: React.FC<{ resultText?: string }> = ({ resultText }) 
                     {isSaved && <Text>Сохранено</Text>}
                 </ModalHeader>
                 <Divider />
-                <ModalBody
-                    dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(resultText || '') }}
-                >
-                    {/* {resultText} */}
+                <ModalBody>
+                    {results.map((result, index) => (
+                        <>
+                            <Text>{result}</Text>
+                            {results.length > 1 && (
+                                <Button
+                                    mb={6}
+                                    mt={2}
+                                    variant={index === selectedRes ? 'solid' : 'outline'}
+                                    onClick={() => setSelectedRes(index)}
+                                >
+                                    Выбрать этот вариант
+                                </Button>
+                            )}
+                        </>
+                    ))}
                 </ModalBody>
                 <ModalFooter>
-                    <Button onClick={() => copyToClipboard(resultText ? resultText : '')}>
+                    <Button onClick={() => copyToClipboard(results ? results[selectedRes] : '')}>
                         <CopyIcon />
                     </Button>
                 </ModalFooter>

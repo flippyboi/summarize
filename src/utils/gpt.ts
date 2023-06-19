@@ -29,31 +29,47 @@ const axiosConfig = {
     },
 };
 
-export const createCompletion = async (
+export const rephrase = async (prompt: string, temperature: number) => {
+    const data = await axios.post(
+        'https://cors-anywhere.herokuapp.com/https://api.aicloud.sbercloud.ru/public/v2/rewriter/predict',
+        {
+            instances: [
+                {
+                    text: prompt,
+                    temperature: temperature,
+                    top_k: 50,
+                    top_p: 0.7,
+                    range_mode: 'bertscore',
+                },
+            ],
+        },
+        axiosConfig,
+    );
+    return data.data.predictions_all;
+};
+
+export const summarize = async (
     prompt: string,
     temperature: number,
     numSeq: number,
     length: number,
 ) => {
-    axios
-        .post(
-            'https://api.aicloud.sbercloud.ru/public/v2/summarizator/predict',
-            {
-                instances: [
-                    {
-                        text: prompt,
-                        num_beams: 5,
-                        num_return_sequences: numSeq,
-                        length_penalty: length,
-                        temperature: temperature,
-                    },
-                ],
-            },
-            axiosConfig,
-        )
-        .then(data => {
-            return data.data.predictions;
-        });
+    const data = await axios.post(
+        'https://cors-anywhere.herokuapp.com/https://api.aicloud.sbercloud.ru/public/v2/summarizator/predict',
+        {
+            instances: [
+                {
+                    text: prompt,
+                    num_beams: 5,
+                    num_return_sequences: numSeq,
+                    length_penalty: length,
+                    temperature: temperature,
+                },
+            ],
+        },
+        axiosConfig,
+    );
+    return data.data.predictions;
 };
 
 // const openAiConfig = new Configuration({

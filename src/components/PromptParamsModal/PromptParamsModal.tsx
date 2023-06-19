@@ -16,6 +16,7 @@ import {
     Text,
     useDisclosure,
     Input,
+    Tooltip,
 } from '@chakra-ui/react';
 
 import { useNotification } from '../../hooks/useNotification';
@@ -42,6 +43,8 @@ export const PromptParamsModal: React.FC<PromptParamsModalProps> = ({ isOpen, on
         setTemperature,
         setNumSeq,
         setLength,
+        selectedPromptPreset,
+        setPromptTitle,
     } = usePromptFormStore();
     const { parametersSet } = useNotification();
 
@@ -74,7 +77,7 @@ export const PromptParamsModal: React.FC<PromptParamsModalProps> = ({ isOpen, on
                         />
                     </Flex> */}
                     <Flex align="center" justify="space-between">
-                        <Text>Придумать заголовок🏷️</Text>
+                        <Text>Задать заголовок🏷️</Text>
                         <Switch
                             isChecked={isTitled}
                             onChange={() => {
@@ -83,6 +86,14 @@ export const PromptParamsModal: React.FC<PromptParamsModalProps> = ({ isOpen, on
                             }}
                         />
                     </Flex>
+                    {isTitled && (
+                        <Flex direction="column">
+                            <Input
+                                placeholder="Заголовок"
+                                onChange={e => setPromptTitle(e.target.value)}
+                            />
+                        </Flex>
+                    )}
                     <Flex direction="column">
                         <Text mb={6}>Креативность генерации текста (температура)</Text>
                         <Slider
@@ -102,7 +113,9 @@ export const PromptParamsModal: React.FC<PromptParamsModalProps> = ({ isOpen, on
                         <Text mt={4}>{temperature}</Text>
                     </Flex>
                     <Flex align="center" justify="space-between">
-                        <Text>Количество результатов</Text>
+                        <Tooltip label="Количество примеров, из которых алгоритмом выбирается наилучший">
+                            <Text>Выборка результата</Text>
+                        </Tooltip>
                         <Slider
                             value={numSeq}
                             min={1}
@@ -116,21 +129,28 @@ export const PromptParamsModal: React.FC<PromptParamsModalProps> = ({ isOpen, on
                         </Slider>
                         <Text ml={2}>{numSeq}</Text>
                     </Flex>
-                    <Flex align="center" justify="space-between">
-                        <Text>Коэф. сокращения текста</Text>
-                        <Slider
-                            value={length}
-                            min={0}
-                            max={1}
-                            step={0.05}
-                            onChange={value => setLength(value)}
-                        >
-                            <SliderTrack>
-                                <SliderFilledTrack />
-                            </SliderTrack>
-                        </Slider>
-                        <Text ml={2}>{length}</Text>
-                    </Flex>
+                    {selectedPromptPreset === 1 && (
+                        <Flex align="center" justify="space-between">
+                            <Tooltip
+                                closeDelay={500}
+                                label="Параметр генерации, влияющий на длину текста (чем выше значение, тем короче текст)"
+                            >
+                                <Text>Штраф к длине</Text>
+                            </Tooltip>
+                            <Slider
+                                value={length}
+                                min={0}
+                                max={2}
+                                step={0.05}
+                                onChange={value => setLength(value)}
+                            >
+                                <SliderTrack>
+                                    <SliderFilledTrack />
+                                </SliderTrack>
+                            </Slider>
+                            <Text ml={2}>{length}</Text>
+                        </Flex>
+                    )}
                 </ModalBody>
                 <ModalFooter gap={2}>
                     {(isFormatted || isTitled) && (
