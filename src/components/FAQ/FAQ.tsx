@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Divider, Text } from '@chakra-ui/react';
+import { Divider, Modal, ModalBody, Text } from '@chakra-ui/react';
 
 import useWindowSize from '../../hooks/useWindowSize';
 import { MobileSheet } from '../MobileSheet/MobileSheet';
@@ -37,5 +37,11 @@ export const FAQ: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ isOpen
             />
         );
     }
-    return <div>FAQ</div>;
+    return (
+        <Modal isOpen={isOpen} onClose={onClose}>
+            <ModalBody>
+                <Content />
+            </ModalBody>
+        </Modal>
+    );
 };
