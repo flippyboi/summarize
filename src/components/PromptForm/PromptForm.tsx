@@ -83,7 +83,9 @@ export const PromptForm = () => {
                 </Flex>
             </Flex>
             <Flex height={isMobile ? 0 : '100%'}>
-                <PromptResult resultText={result} />
+                {result?.map(item => (
+                    <PromptResult resultText={item} />
+                ))}
             </Flex>
             <PromptParamsModal isOpen={isOpen} onClose={onClose} />
         </Flex>
