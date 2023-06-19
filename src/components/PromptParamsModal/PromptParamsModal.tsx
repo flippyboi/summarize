@@ -15,6 +15,7 @@ import {
     Switch,
     Text,
     useDisclosure,
+    Input,
 } from '@chakra-ui/react';
 
 import { useNotification } from '../../hooks/useNotification';
@@ -33,10 +34,14 @@ export const PromptParamsModal: React.FC<PromptParamsModalProps> = ({ isOpen, on
     const {
         isFormatted,
         isTitled,
+        numSeq,
+        length,
         setIsFormatted,
         setIsTitled,
         temperature,
         setTemperature,
+        setNumSeq,
+        setLength,
     } = usePromptFormStore();
     const { parametersSet } = useNotification();
 
@@ -58,7 +63,7 @@ export const PromptParamsModal: React.FC<PromptParamsModalProps> = ({ isOpen, on
             <ModalContent>
                 <ModalHeader>Параметры</ModalHeader>
                 <ModalBody display="flex" flexDirection="column" gap={4}>
-                    <Flex align="center" justify="space-between">
+                    {/* <Flex align="center" justify="space-between">
                         <Text>Форматировать🪄</Text>
                         <Switch
                             isChecked={isFormatted}
@@ -67,7 +72,7 @@ export const PromptParamsModal: React.FC<PromptParamsModalProps> = ({ isOpen, on
                                 setParametersTriggered(true);
                             }}
                         />
-                    </Flex>
+                    </Flex> */}
                     <Flex align="center" justify="space-between">
                         <Text>Придумать заголовок🏷️</Text>
                         <Switch
@@ -95,6 +100,36 @@ export const PromptParamsModal: React.FC<PromptParamsModalProps> = ({ isOpen, on
                             </SliderTrack>
                         </Slider>
                         <Text mt={4}>{temperature}</Text>
+                    </Flex>
+                    <Flex align="center" justify="space-between">
+                        <Text>Количество результатов</Text>
+                        <Slider
+                            value={numSeq}
+                            min={1}
+                            max={6}
+                            step={1}
+                            onChange={value => setNumSeq(value)}
+                        >
+                            <SliderTrack>
+                                <SliderFilledTrack />
+                            </SliderTrack>
+                        </Slider>
+                        <Text ml={2}>{numSeq}</Text>
+                    </Flex>
+                    <Flex align="center" justify="space-between">
+                        <Text>Коэф. сокращения текста</Text>
+                        <Slider
+                            value={length}
+                            min={0}
+                            max={1}
+                            step={0.05}
+                            onChange={value => setLength(value)}
+                        >
+                            <SliderTrack>
+                                <SliderFilledTrack />
+                            </SliderTrack>
+                        </Slider>
+                        <Text ml={2}>{length}</Text>
                     </Flex>
                 </ModalBody>
                 <ModalFooter gap={2}>

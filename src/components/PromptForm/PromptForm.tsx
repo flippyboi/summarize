@@ -23,12 +23,14 @@ export const PromptForm = () => {
         setInitialText,
         isFormatted,
         isTitled,
+        length,
+        numSeq,
         setPromptTitle,
         temperature,
     } = usePromptFormStore();
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [isLoading, setIsLoading] = useState(false);
-    const [result, setResult] = useState<string | undefined>('');
+    const [result, setResult] = useState<string[] | undefined>([]);
     const handleRequest = () => {
         if (textareaRef.current?.value === '') {
             return emptyField();
@@ -37,33 +39,10 @@ export const PromptForm = () => {
         const prompt = promptPresets?.find(preset => preset.id === selectedPromptPreset);
         if (prompt && textareaRef.current) {
             setInitialText(textareaRef.current.value);
-            createCompletion(`${prompt.promt}: "${textareaRef.current.value}"`, temperature)
-                .then(res => {
-                    if (isFormatted) {
-                        createCompletion(
-                            'Отформатируй данный текст в HTML: ' + res,
-                            temperature,
-                        ).then(res => {
-                            setResult(res);
-                        });
-                    } else {
-                        setResult(res);
-                    }
-                    if (isTitled) {
-                        createCompletion(
-                            'Придумай короткий заголовок длиной не более 6 слов данному тексту: ' +
-                                res,
-                            temperature,
-                        ).then(res => {
-                            if (res) {
-                                setPromptTitle(res);
-                            }
-                        });
-                    }
-                })
-                .finally(() => {
-                    setIsLoading(false);
-                });
+            createCompletion(textareaRef.current.value, temperature, numSeq, length).then(res => {
+                console.log(res);
+                setIsLoading(false);
+            });
         }
     };
 
