@@ -1,28 +1,6 @@
 import axios from 'axios';
 import { Configuration, OpenAIApi } from 'openai';
 
-// const options = {
-//     method: 'POST',
-//     url: 'https://openai80.p.rapidapi.com/completions',
-//     timeout: 30000,
-//     headers: {
-//         'content-type': 'application/json',
-//         'X-RapidAPI-Key': 'c61239d461msh98a0878d9a51a12p1e4444jsna07dee972227',
-//         'X-RapidAPI-Host': 'openai80.p.rapidapi.com',
-//     },
-//     data: {
-//         model: 'text-davinci-003',
-//         prompt: '',
-//         max_tokens: 1024,
-//         temperature: 0,
-//         top_p: 1,
-//         n: 1,
-//         stream: false,
-//         logprobs: null,
-//         stop: '',
-//     },
-// };
-
 const axiosConfig = {
     headers: {
         'Access-Control-Allow-Origin': '*',
@@ -31,7 +9,7 @@ const axiosConfig = {
 
 export const rephrase = async (prompt: string, temperature: number) => {
     const data = await axios.post(
-        'https://cors-anywhere.herokuapp.com/https://api.aicloud.sbercloud.ru/public/v2/rewriter/predict',
+        'https://framed-knowledge-somewhere-treatments.trycloudflare.com/https://api.aicloud.sbercloud.ru/public/v2/rewriter/predict',
         {
             instances: [
                 {
@@ -55,7 +33,7 @@ export const summarize = async (
     length: number,
 ) => {
     const data = await axios.post(
-        'https://cors-anywhere.herokuapp.com/https://api.aicloud.sbercloud.ru/public/v2/summarizator/predict',
+        'https://framed-knowledge-somewhere-treatments.trycloudflare.com/https://api.aicloud.sbercloud.ru/public/v2/summarizator/predict',
         {
             instances: [
                 {
