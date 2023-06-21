@@ -7,9 +7,13 @@ const axiosConfig = {
     },
 };
 
+const tunnel = 'https://ls-involves-compressed-plastics.trycloudflare.com';
+const rephraseUrl = '/https://api.aicloud.sbercloud.ru/public/v2/rewriter/predict';
+const summarizeUrl = '/https://api.aicloud.sbercloud.ru/public/v2/summarizator/predict';
+
 export const rephrase = async (prompt: string, temperature: number) => {
     const data = await axios.post(
-        'https://cap-weird-alumni-combo.trycloudflare.com/https://api.aicloud.sbercloud.ru/public/v2/rewriter/predict',
+        tunnel + rephraseUrl,
         {
             instances: [
                 {
@@ -33,7 +37,7 @@ export const summarize = async (
     length: number,
 ) => {
     const data = await axios.post(
-        'https://cap-weird-alumni-combo.trycloudflare.com/https://api.aicloud.sbercloud.ru/public/v2/summarizator/predict',
+        tunnel + summarizeUrl,
         {
             instances: [
                 {
