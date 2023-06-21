@@ -9,7 +9,7 @@ const axiosConfig = {
 
 export const rephrase = async (prompt: string, temperature: number) => {
     const data = await axios.post(
-        'https://framed-knowledge-somewhere-treatments.trycloudflare.com/https://api.aicloud.sbercloud.ru/public/v2/rewriter/predict',
+        'https://cap-weird-alumni-combo.trycloudflare.com/https://api.aicloud.sbercloud.ru/public/v2/rewriter/predict',
         {
             instances: [
                 {
@@ -33,7 +33,7 @@ export const summarize = async (
     length: number,
 ) => {
     const data = await axios.post(
-        'https://framed-knowledge-somewhere-treatments.trycloudflare.com/https://api.aicloud.sbercloud.ru/public/v2/summarizator/predict',
+        'https://cap-weird-alumni-combo.trycloudflare.com/https://api.aicloud.sbercloud.ru/public/v2/summarizator/predict',
         {
             instances: [
                 {
